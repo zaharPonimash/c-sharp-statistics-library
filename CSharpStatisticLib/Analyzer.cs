@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace StatisticsLibrary
 {
-    public class Analyzer<T> where T : IComparable
+    public class Analyzer
     {
-        private T[] m_Values;
+        private double[] m_Values;
 
-        public Analyzer(T[] theSeed)
+        public Analyzer(double[] theSeed)
         {
             if (theSeed.Count() == 0)
                 throw new Exception("You must provide a valid dataset with at least 1 item.");
@@ -25,7 +25,7 @@ namespace StatisticsLibrary
         /// <returns>Returns the average of the array.</returns>
         public double Mean()
         {
-            return m_Values.Average(x => Convert.ToDouble(x));
+            return m_Values.Average();
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace StatisticsLibrary
                 return (Convert.ToDouble(m_Values[med]) + Convert.ToDouble(m_Values[med + 1])) / 2;
             }
 
-            return Convert.ToDouble(m_Values[med]);
+            return m_Values[med];
         }
 
         /// <summary>
@@ -65,9 +65,9 @@ namespace StatisticsLibrary
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public double StandardizedScore(T value)
+        public double StandardizedScore(double value)
         {
-            return (Convert.ToDouble(value) - Mean()) / PopulationStandardDeviation();
+            return (value - Mean()) / PopulationStandardDeviation();
         }
         #endregion
 
@@ -76,7 +76,7 @@ namespace StatisticsLibrary
         /// Returns the largest value in the dataset
         /// </summary>
         /// <returns></returns>
-        public T Max()
+        public double Max()
         {
             return m_Values.Max();
         }
@@ -85,7 +85,7 @@ namespace StatisticsLibrary
         /// Returns the smallest value in the dataset
         /// </summary>
         /// <returns></returns>
-        public T Min()
+        public double Min()
         {
             return m_Values.Min();
         }
@@ -94,7 +94,7 @@ namespace StatisticsLibrary
         /// Returns the effective range of the dataset
         /// </summary>
         /// <returns></returns>
-        public T Range()
+        public double Range()
         {
             dynamic a = m_Values.Max();
             dynamic b = m_Values.Min();
@@ -106,7 +106,7 @@ namespace StatisticsLibrary
         /// Returns the first quartile, or median of the lower half of the dataset
         /// </summary>
         /// <returns></returns>
-        public T FirstQuartile()
+        public double FirstQuartile()
         {
             var median = Median();
             var filtered = m_Values.Where(x => Convert.ToDouble(x) <= median);
@@ -118,7 +118,7 @@ namespace StatisticsLibrary
         /// Returns the third quartile, or median of the upper half of the dataset
         /// </summary>
         /// <returns></returns>
-        public T ThirdQuartile()
+        public double ThirdQuartile()
         {
             var median = Median();
             var filtered = m_Values.Where(x => Convert.ToDouble(x) >= median);
@@ -130,7 +130,7 @@ namespace StatisticsLibrary
         /// Returns the interquartile range, the distance between the first and third quartiles
         /// </summary>
         /// <returns></returns>
-        public T InterquartileRange()
+        public double InterquartileRange()
         {
             dynamic a = FirstQuartile();
             dynamic b = ThirdQuartile();
@@ -271,7 +271,7 @@ namespace StatisticsLibrary
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        private T MedianWith(IEnumerable<T> items)
+        private double MedianWith(IEnumerable<double> items)
         {
             int med = items.Count() / 2;
             if (items.Count() % 2 != 0)
@@ -283,6 +283,33 @@ namespace StatisticsLibrary
 
             return items.ElementAt(med);
         }
+        #endregion
+
+        #region Noise
+
+
+        /// <summary>
+        /// Генерация некоррелированного шама с нормальным распределением в заданном диап.
+        /// </summary>
+        /// <param name="random">Датчик СЧ</param>
+        /// <param name="n">Длинна последовательности</param>
+        /// <param name="min">Минимум</param>
+        /// <param name="max">Максимум</param>
+        public static double[] UniformDistribution(Random random, int n, double min = 0, double max = 1)
+        {
+            double magn = max - min;
+            double[] result = new double[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                result[i] = magn * random.NextDouble() + min;
+            }
+
+            return result;
+        }
+
+
+
         #endregion
 
         public int Count { get; set; }
