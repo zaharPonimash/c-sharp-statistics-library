@@ -89,7 +89,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(183, 39);
             this.label1.TabIndex = 4;
-            this.label1.Text = "Данные: \r\nШум с равномерным \r\nраспределением в диапазоне [0-1]";
+            this.label1.Text = "Данные: \r\nШум с с нормальным \r\nраспределением в диапазоне [0-1]";
             // 
             // groupBox1
             // 

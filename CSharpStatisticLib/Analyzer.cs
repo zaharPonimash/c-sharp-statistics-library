@@ -289,7 +289,7 @@ namespace StatisticsLibrary
 
 
         /// <summary>
-        /// Генерация некоррелированного шама с нормальным распределением в заданном диап.
+        /// Генерация некоррелированного шума с равномерным распределением в заданном диапазоне
         /// </summary>
         /// <param name="random">Датчик СЧ</param>
         /// <param name="n">Длинна последовательности</param>
@@ -308,7 +308,39 @@ namespace StatisticsLibrary
             return result;
         }
 
+        /// <summary>
+        /// Генерация некоррелированного шума с нормальным распределением в заданном диапазоне
+        /// </summary>
+        /// <param name="random">Датчик СЧ</param>
+        /// <param name="n">Длинна последовательности</param>
+        /// <param name="mean">Среднее</param>
+        /// <param name="std">Мат. ожидание</param>
+        public static double[] NormalDistribution(Random random, int n, double mean = 0, double std = 1)
+        {
+            int m = 45;
+            double[] uDs;
+            double[] result = new double[n];
+            
 
+            for (int i = 0; i < m; i++)
+            {
+                uDs = UniformDistribution(random, n, -1, 1);
+
+                for (int j = 0; j < n; j++)
+                {
+                    result[j] += uDs[j];
+                }
+            }
+
+            for (int i = 0; i < n; i++)
+            {
+               result[i] = std * result[i] + mean;
+            }
+
+
+
+            return result;
+        }
 
         #endregion
 

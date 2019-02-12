@@ -13,7 +13,7 @@ namespace Examples
 {
     public partial class Form1 : Form
     {
-        double[] data = Analyzer.UniformDistribution(new Random(5), 1000);
+        double[] data = Analyzer.NormalDistribution(new Random(5), 10000);
         Analyzer analyzer;
 
         public Form1()
